@@ -6,20 +6,21 @@ import net.heizer.relivedmobs.entity.custom.BelugaEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class BelugaRenderer extends MobRenderer<BelugaEntity, BelugaModel<BelugaEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(RMMod.MOD_ID,
+    private static final ResourceLocation TEXTURE = new ResourceLocation(RMMod.MOD_ID,
             "textures/entity/beluga/beluga.png");
 
-    protected static final ResourceLocation BABY = new ResourceLocation(RMMod.MOD_ID,
+    private static final ResourceLocation BABY = new ResourceLocation(RMMod.MOD_ID,
             "textures/entity/beluga/beluga_baby.png");
 
-    public BelugaRenderer(EntityRendererProvider.Context p_174304_, BelugaModel<BelugaEntity> p_174305_, float p_174306_) {
-        super(p_174304_, p_174305_, p_174306_);
+    public BelugaRenderer(EntityRendererProvider.Context p_174304_) {
+        super(p_174304_, new BelugaModel<>(), 3f);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BelugaEntity entity)
+    public @NotNull ResourceLocation getTextureLocation(BelugaEntity entity)
     {
         if (entity.isBaby()) {
             return BABY;

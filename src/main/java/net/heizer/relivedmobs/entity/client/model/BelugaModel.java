@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.prefs.NodeChangeEvent;
+
 public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "beluga"), "main");
@@ -23,8 +25,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
     //Beluga Tail
     private final ModelPart tail;
     private final ModelPart back_fin;
-
-    public BelugaModel(ModelPart root, ModelPart fin0, ModelPart fin1, ModelPart tail, ModelPart back_fin) {
+    public BelugaModel() {
 
         this.Beluga = root.getChild("Beluga");
         this.fin0 = fin0;
