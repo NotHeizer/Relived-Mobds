@@ -8,23 +8,18 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+import javax.xml.stream.Location;
+
 public class BelugaRenderer extends MobRenderer<BelugaEntity, BelugaModel<BelugaEntity>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(RMMod.MOD_ID,
             "textures/entity/beluga/beluga.png");
 
-    private static final ResourceLocation BABY = new ResourceLocation(RMMod.MOD_ID,
-            "textures/entity/beluga/beluga_baby.png");
-
-    public BelugaRenderer(EntityRendererProvider.Context p_174304_) {
-        super(p_174304_, new BelugaModel<>(), 3f);
+    public BelugaRenderer(EntityRendererProvider.Context context) {
+        super(context, new BelugaModel<>(context.bakeLayer(BelugaModel.LAYER_LOCATION)), 1F);
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(BelugaEntity entity)
-    {
-        if (entity.isBaby()) {
-            return BABY;
-        }
+    public @NotNull ResourceLocation getTextureLocation(BelugaEntity beluga) {
         return TEXTURE;
     }
 }

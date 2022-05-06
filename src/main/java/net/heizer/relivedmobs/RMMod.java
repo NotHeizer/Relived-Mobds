@@ -2,10 +2,15 @@ package net.heizer.relivedmobs;
 
 import com.mojang.logging.LogUtils;
 import net.heizer.relivedmobs.entity.RMModEntityTypes;
+import net.heizer.relivedmobs.entity.client.model.BelugaModel;
 import net.heizer.relivedmobs.entity.client.renderer.BelugaRenderer;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
 import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,7 +31,6 @@ public class RMMod {
     public RMMod() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        //register Classes here
         RMModItems.register(eventBus);
         RMModEntityTypes.register(eventBus);
 
@@ -36,13 +40,25 @@ public class RMMod {
 
     private void clientSetup(final FMLClientSetupEvent event) {
 
-        //register Custom Classes here
         EntityRenderers.register(RMModEntityTypes.BELUGA.get(), BelugaRenderer::new);
     }
 
-    @SubscribeEvent
-    public static void onAttributesRegistered(EntityAttributeCreationEvent event) {
+    private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(BelugaModel.LAYER_LOCATION, BelugaModel::createBodyLayer);
+    }
 
-        //register Attribute creation event here
+
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(RMModEntityTypes.BELUGA.get(),
+                    SpawnPlacements.Type.IN_WATER,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        });
+    }
+
+    private void entityAttributeEvent(EntityAttributeCreationEvent event) {
+
+        event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
     }
 }

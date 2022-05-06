@@ -11,13 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-import java.util.prefs.NodeChangeEvent;
 
 public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "beluga"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("RMMod.MOD_ID", "beluga"), "main");
 
     //Beluga Body
+    private final ModelPart root;
     private final ModelPart Beluga;
     //Beluga Fins
     private final ModelPart fin0;
@@ -25,14 +25,21 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
     //Beluga Tail
     private final ModelPart tail;
     private final ModelPart back_fin;
-    public BelugaModel() {
 
+
+    public BelugaModel(ModelPart root) {
+        //root
+        this.root = root;
+        //beluga
         this.Beluga = root.getChild("Beluga");
-        this.fin0 = fin0;
-        this.fin1 = fin1;
-        this.tail = tail;
-        this.back_fin = back_fin;
+        //Beluga Fins
+        this.fin0 = Beluga.getChild("fin0");
+        this.fin1 = Beluga.getChild("fin1");
+        //Beluga Tail
+        this.tail = Beluga.getChild("tail");
+        this.back_fin = Beluga.getChild("back_fin");
     }
+
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -58,10 +65,12 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.Beluga.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.15 * limbSwingAmount);
+
         if (entity.getDeltaMovement().horizontalDistanceSqr() > 1.0E-7D) {
             this.Beluga.xRot = headPitch * ((float)Math.PI / 180F);
             this.Beluga.zRot = headPitch * ((float)Math.PI / 180F);
         }
+
         this.fin0.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
         this.fin1.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
         this.tail.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
