@@ -35,6 +35,8 @@ public class RMMod {
 
         eventBus.addListener(this::clientSetup);
         eventBus.addListener(this::registerLayers);
+        eventBus.addListener(this::entityAttributeEvent);
+        eventBus.addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -58,7 +60,6 @@ public class RMMod {
     }
 
     private void entityAttributeEvent(EntityAttributeCreationEvent event) {
-
         event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
     }
 }
