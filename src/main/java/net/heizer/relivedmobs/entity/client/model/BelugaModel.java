@@ -2,6 +2,7 @@ package net.heizer.relivedmobs.entity.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.heizer.relivedmobs.RMMod;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,10 +15,9 @@ import net.minecraft.world.entity.Entity;
 
 public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("RMMod.MOD_ID", "beluga"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RMMod.MOD_ID, "beluga"), "main");
 
     //Beluga Body
-    private final ModelPart root;
     private final ModelPart Beluga;
     //Beluga Fins
     private final ModelPart fin0;
@@ -28,8 +28,6 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
 
     public BelugaModel(ModelPart root) {
-        //root
-        this.root = root;
         //beluga
         this.Beluga = root.getChild("Beluga");
         //Beluga Fins

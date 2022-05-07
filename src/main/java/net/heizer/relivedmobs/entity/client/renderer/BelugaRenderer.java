@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.stream.Location;
 
 public class BelugaRenderer extends MobRenderer<BelugaEntity, BelugaModel<BelugaEntity>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(RMMod.MOD_ID,
