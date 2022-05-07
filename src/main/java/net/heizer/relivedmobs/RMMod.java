@@ -34,6 +34,7 @@ public class RMMod {
         RMModEntityTypes.register(eventBus);
 
         eventBus.addListener(this::clientSetup);
+        eventBus.addListener(this::registerLayers);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
