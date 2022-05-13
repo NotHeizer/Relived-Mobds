@@ -19,6 +19,10 @@ public class RMModItems {
             () -> new ForgeSpawnEggItem(RMModEntityTypes.BELUGA,247242225, 220203167,
                     new Item.Properties().tab(RMModTab.RELIVED_MOBS)));
 
+    public static final RegistryObject<Item> BLUE_WHALE_SPAWN_EGG = ITEMS.register("blue_whale_spawn_egg",
+            () -> new ForgeSpawnEggItem(RMModEntityTypes.BLUE_WHALE,247242225, 220203167,
+                    new Item.Properties().tab(RMModTab.RELIVED_MOBS)));
+
 
     public static void register (IEventBus eventBus) {
         ITEMS.register(eventBus);

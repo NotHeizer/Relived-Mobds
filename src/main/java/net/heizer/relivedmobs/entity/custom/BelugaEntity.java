@@ -32,7 +32,7 @@ public class BelugaEntity extends WaterAnimal {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20D)
                 .add(Attributes.MOVEMENT_SPEED, 0.7f)
-                .add(Attributes.FOLLOW_RANGE, 100D)
+                .add(Attributes.FOLLOW_RANGE, 64D)
                 .build();
     }
 

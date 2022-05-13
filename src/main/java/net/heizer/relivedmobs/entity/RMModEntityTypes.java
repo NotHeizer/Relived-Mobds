@@ -22,7 +22,7 @@ public class RMModEntityTypes {
 
     public static final RegistryObject<EntityType<BlueWhaleEntity>> BLUE_WHALE = ENTITY_TYPES.register("blue_whale",
             () -> EntityType.Builder.of(BlueWhaleEntity::new, MobCategory.WATER_CREATURE)
-                    .sized(15f, 5f)
+                    .sized(2f, 5f)
                     .build(new ResourceLocation(RMMod.MOD_ID, "blue_whale").toString()));
 
 

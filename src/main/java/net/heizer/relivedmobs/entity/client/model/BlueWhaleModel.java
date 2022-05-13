@@ -20,6 +20,8 @@ public class BlueWhaleModel<T extends Entity> extends EntityModel<T> {
     private final ModelPart root;
     //Head
     private final ModelPart head;
+    private final ModelPart upperjaw;
+    private final ModelPart jaw;
     //Tail
     private final ModelPart tail;
     private final ModelPart tail2;
@@ -35,6 +37,8 @@ public class BlueWhaleModel<T extends Entity> extends EntityModel<T> {
         this.BlueWhale = root.getChild("BlueWhale");
         //Head
         this.head = BlueWhale.getChild("head");
+        this.upperjaw = head.getChild("upperjaw");
+        this.jaw = head.getChild("jaw");
         //Tail
         this.tail = BlueWhale.getChild("tail");
         this.tail2 = tail.getChild("tail2");
@@ -74,23 +78,19 @@ public class BlueWhaleModel<T extends Entity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        //Blue Whale
-        this.BlueWhale.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.4 * limbSwingAmount);
-        this.BlueWhale.y = (float) (Mth.cos((float) (limbSwing * 0.5)) * 1 * limbSwingAmount);
-        //Head
-        this.head.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.2 * limbSwingAmount);
-        //Tail
-        this.tail.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
-        this.tail2.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.5 * limbSwingAmount);
-        this.backtail.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 1.5 * limbSwingAmount);
-        //Fins
-        this.fin1.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.8 * limbSwingAmount);
-        this.fin1.yRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.5 * limbSwingAmount);
-        this.fin1.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.3 * limbSwingAmount);
-        this.fin2.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.8 * limbSwingAmount);
-        this.fin2.yRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.5 * limbSwingAmount);
-        this.fin2.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
+        this.BlueWhale.xRot = headPitch * ((float)Math.PI / 180F);
+        this.BlueWhale.yRot = netHeadYaw * ((float)Math.PI / 180F);
+        if (entity.getDeltaMovement().horizontalDistanceSqr() > 1.0E-7D) {
+            this.BlueWhale.xRot += -0.05F - 0.05F * Mth.cos(ageInTicks * 0.3F);
+            this.tail.xRot = -0.1F * Mth.cos(ageInTicks * 0.3F);
+            this.tail2.xRot = -0.1F * Mth.cos(ageInTicks * 0.3F);
+            this.backtail.xRot = -0.1F * Mth.cos(ageInTicks * 0.3F);
+            this.fin1.yRot = (float) (Mth.cos((float) (ageInTicks * 0.2)) * -0.3 * limbSwingAmount);
+            this.fin2.yRot = (float) (Mth.cos((float) (ageInTicks * 0.2)) * 0.3 * limbSwingAmount);
+            float upperJawAngles = (Mth.cos(ageInTicks * 0.2f) + Mth.sin(ageInTicks * 0.25f) + 1.3f) * -0.03f + (Mth.cos(limbSwing * 0.4f) + 0.6f) * limbSwingAmount / 5;
+            this.upperjaw.xRot = upperJawAngles;
 
+        }
     }
 
     @Override

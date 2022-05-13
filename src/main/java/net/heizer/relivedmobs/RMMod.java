@@ -7,6 +7,7 @@ import net.heizer.relivedmobs.entity.client.model.BlueWhaleModel;
 import net.heizer.relivedmobs.entity.client.renderer.BelugaRenderer;
 import net.heizer.relivedmobs.entity.client.renderer.BlueWhaleRenderer;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
+import net.heizer.relivedmobs.entity.custom.BlueWhaleEntity;
 import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -71,6 +72,6 @@ public class RMMod {
 
     private void entityAttributeEvent(EntityAttributeCreationEvent event) {
         event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
-        event.put(RMModEntityTypes.BLUE_WHALE.get(), BelugaEntity.setAttributes());
+        event.put(RMModEntityTypes.BLUE_WHALE.get(), BlueWhaleEntity.setAttributes());
     }
 }
