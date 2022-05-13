@@ -1,9 +1,11 @@
 {
   "item.relivedmobs.beluga_spawn_egg": "Beluga Spawn Egg",
+  "item.relivedmobs.blue_whale_spawn_egg": "Blue Whale Spawn Egg",
 
   "block.relivedmobs.name": "visual name",
 
   "entity.relivedmobs.beluga": "Beluga",
+  "entity.relivedmobs.blue_whale": "Blue Whale",
 
   "itemGroup.relived_mobs_tab": "Relived Mobs"
 

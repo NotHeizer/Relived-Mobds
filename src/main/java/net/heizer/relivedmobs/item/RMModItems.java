@@ -16,7 +16,7 @@ public class RMModItems {
 
 
     public static final RegistryObject<Item> BELUGA_SPAWN_EGG = ITEMS.register("beluga_spawn_egg",
-            () -> new ForgeSpawnEggItem(RMModEntityTypes.BELUGA,3498527, 8306817,
+            () -> new ForgeSpawnEggItem(RMModEntityTypes.BELUGA,247242225, 220203167,
                     new Item.Properties().tab(RMModTab.RELIVED_MOBS)));
 
 

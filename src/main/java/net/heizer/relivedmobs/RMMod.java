@@ -3,7 +3,9 @@ package net.heizer.relivedmobs;
 import com.mojang.logging.LogUtils;
 import net.heizer.relivedmobs.entity.RMModEntityTypes;
 import net.heizer.relivedmobs.entity.client.model.BelugaModel;
+import net.heizer.relivedmobs.entity.client.model.BlueWhaleModel;
 import net.heizer.relivedmobs.entity.client.renderer.BelugaRenderer;
+import net.heizer.relivedmobs.entity.client.renderer.BlueWhaleRenderer;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
 import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -43,10 +45,12 @@ public class RMMod {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         EntityRenderers.register(RMModEntityTypes.BELUGA.get(), BelugaRenderer::new);
+        EntityRenderers.register(RMModEntityTypes.BLUE_WHALE.get(), BlueWhaleRenderer::new);
     }
 
     private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BelugaModel.LAYER_LOCATION, BelugaModel::createBodyLayer);
+        event.registerLayerDefinition(BlueWhaleModel.LAYER_LOCATION, BlueWhaleModel::createBodyLayer);
     }
 
 
@@ -57,9 +61,16 @@ public class RMMod {
                     Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         });
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(RMModEntityTypes.BLUE_WHALE.get(),
+                    SpawnPlacements.Type.IN_WATER,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        });
     }
 
     private void entityAttributeEvent(EntityAttributeCreationEvent event) {
         event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
+        event.put(RMModEntityTypes.BLUE_WHALE.get(), BelugaEntity.setAttributes());
     }
 }

@@ -2,6 +2,7 @@ package net.heizer.relivedmobs.entity;
 
 import net.heizer.relivedmobs.RMMod;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
+import net.heizer.relivedmobs.entity.custom.BlueWhaleEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -16,8 +17,13 @@ public class RMModEntityTypes {
 
     public static final RegistryObject<EntityType<BelugaEntity>> BELUGA = ENTITY_TYPES.register("beluga",
             () -> EntityType.Builder.of(BelugaEntity::new, MobCategory.WATER_CREATURE)
-                    .sized(0.7f, 3f)
+                    .sized(1.3f, 1f)
                     .build(new ResourceLocation(RMMod.MOD_ID, "beluga").toString()));
+
+    public static final RegistryObject<EntityType<BlueWhaleEntity>> BLUE_WHALE = ENTITY_TYPES.register("blue_whale",
+            () -> EntityType.Builder.of(BlueWhaleEntity::new, MobCategory.WATER_CREATURE)
+                    .sized(15f, 5f)
+                    .build(new ResourceLocation(RMMod.MOD_ID, "blue_whale").toString()));
 
 
 

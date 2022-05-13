@@ -18,7 +18,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RMMod.MOD_ID, "beluga"), "main");
 
     //Beluga Body
-    private final ModelPart Beluga;
+    private final ModelPart beluga;
     private final ModelPart root;
     //Tail
     private final ModelPart tail;
@@ -32,13 +32,13 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
         //Root
         this.root = root;
         //Beluga
-        this.Beluga = root.getChild("Beluga");
+        this.beluga = root.getChild("Beluga");
         //Tail
-        this.tail = Beluga.getChild("tail");
-        this.back_fin = Beluga.getChild("back_fin");
+        this.tail = beluga.getChild("tail");
+        this.back_fin = tail.getChild("back_fin");
         //Fin
-        this.fin0 = Beluga.getChild("fin0");
-        this.fin1 = Beluga.getChild("fin1");
+        this.fin0 = beluga.getChild("fin0");
+        this.fin1 = beluga.getChild("fin1");
     }
 
 
@@ -46,35 +46,38 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition Beluga = partdefinition.addOrReplaceChild("Beluga", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 1.0F));
+        PartDefinition beluga = partdefinition.addOrReplaceChild("Beluga", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 1.0F));
 
-        PartDefinition body = Beluga.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, -10.0F, -13.0F, 15.0F, 16.0F, 24.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.0F, 1.0F));
+        PartDefinition body = beluga.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, -10.0F, -13.0F, 15.0F, 16.0F, 24.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.0F, 1.0F));
 
         body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(54, 0).addBox(-5.5F, -6.0F, -11.0F, 11.0F, 12.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, -13.0F));
 
-        PartDefinition tail = Beluga.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 40).addBox(-5.5F, -5.0F, 0.0F, 11.0F, 10.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 12.0F));
+        PartDefinition tail = beluga.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 40).addBox(-5.5F, -5.0F, 0.0F, 11.0F, 10.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 12.0F));
 
         tail.addOrReplaceChild("back_fin", CubeListBuilder.create().texOffs(38, 40).addBox(-8.5F, -1.5F, -3.0F, 17.0F, 3.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 15.0F));
 
-        Beluga.addOrReplaceChild("fin0", CubeListBuilder.create().texOffs(47, 65).addBox(-1.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(7.9F, 5.0F, -5.5F, 0.0F, 0.0F, 0.5236F));
+        beluga.addOrReplaceChild("fin0", CubeListBuilder.create().texOffs(47, 65).addBox(-1.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(7.9F, 5.0F, -5.5F, 0.0F, 0.0F, 0.5236F));
 
-        Beluga.addOrReplaceChild("fin1", CubeListBuilder.create().texOffs(54, 56).mirror().addBox(-10.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-7.9F, 5.0F, -5.5F, 0.0F, 0.0F, -0.5236F));
+        beluga.addOrReplaceChild("fin1", CubeListBuilder.create().texOffs(54, 56).mirror().addBox(-10.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-7.9F, 5.0F, -5.5F, 0.0F, 0.0F, -0.5236F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.Beluga.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.15 * limbSwingAmount);
+        this.beluga.xRot = headPitch * ((float)Math.PI / 180F);
+        this.beluga.yRot = headPitch * ((float)Math.PI / 180F);
+        if (entity.getDeltaMovement().horizontalDistanceSqr() > 1.0E-7D) {
+            this.beluga.xRot += -0.08F - 0.08F * Mth.cos(ageInTicks * 0.5F);
+            this.tail.xRot = -0.1F * Mth.cos(ageInTicks * 0.5F);
+            this.back_fin.xRot = -0.3F * Mth.cos(ageInTicks * 0.5F);
+        }
         this.fin0.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
         this.fin1.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
-        this.tail.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
-        this.back_fin.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.5 * limbSwingAmount);
-
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        Beluga.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        beluga.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }
