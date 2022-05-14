@@ -27,14 +27,11 @@ public class RMModEntityGeneration {
         }
 
         //Blue Whale spawn
-        if(doesBiomeMatch(event.getName(), Biomes.OCEAN)) {
-            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 3, 1, 1));
-        }
         if(doesBiomeMatch(event.getName(), Biomes.DEEP_OCEAN)) {
-            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 3, 1, 1));
+            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 1, 1, 1));
         }
         if(doesBiomeMatch(event.getName(), Biomes.DEEP_LUKEWARM_OCEAN)) {
-            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 3, 1, 1));
+            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 1, 1, 1));
         }
     }
 

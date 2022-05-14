@@ -1,14 +1,11 @@
 package net.heizer.relivedmobs.entity.custom;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -19,10 +16,7 @@ import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.WaterAnimal;
-import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +35,9 @@ public class BlueWhaleEntity extends WaterAnimal {
         xpReward = 5;
         setNoAi(false);
     }
+    //--------------------------------------------------------------------------------
 
+    //Blue Whale Attributes
     public static AttributeSupplier setAttributes() {
         return WaterAnimal.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 120D)
@@ -49,22 +45,36 @@ public class BlueWhaleEntity extends WaterAnimal {
                 .add(Attributes.FOLLOW_RANGE, 64D)
                 .build();
     }
+    //--------------------------------------------------------------------------------
 
+    //Blue Whale Goals
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new BreathAirGoal(this));
+        this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 0.7D, 10));
+        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.7D));
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this ,0.7D));
+    }
+    //--------------------------------------------------------------------------------
+
+    //Breath Underwater|Air Supply|Moistness
     public boolean canBreatheUnderwater() {
         return false;
     }
-
     protected void handleAirSupply(int p_28326_) {
     }
-
+    public int getMaxAirSupply() {
+        return 4800;
+    }
     public int getMoistnessLevel() {
         return this.entityData.get(MOISTNESS_LEVEL);
     }
-
     public void setMoisntessLevel(int moisntessLevel) {
         this.entityData.set(MOISTNESS_LEVEL, moisntessLevel);
     }
-
+    protected int increaseAirSupply(int p_28389_) {
+        return this.getMaxAirSupply();
+    }
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(MOISTNESS_LEVEL, 2400);
@@ -80,18 +90,7 @@ public class BlueWhaleEntity extends WaterAnimal {
         this.setMoisntessLevel(pCompound.getInt("Moistness"));
     }
 
-    protected PathNavigation createNavigation(Level pLevel) {
-        return new WaterBoundPathNavigation(this, pLevel);
-    }
 
-
-    public int getMaxAirSupply() {
-        return 4800;
-    }
-
-    protected int increaseAirSupply(int pCurrentAir) {
-        return this.getMaxAirSupply();
-    }
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
@@ -100,6 +99,36 @@ public class BlueWhaleEntity extends WaterAnimal {
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
+
+    //--------------------------------------------------------------------------------
+
+    //Blue Whale Path Navigation
+    protected PathNavigation createNavigation(Level pLevel) {
+        return new WaterBoundPathNavigation(this, pLevel);
+    }
+    //--------------------------------------------------------------------------------
+
+    //Blue Whale Sounds
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return SoundEvents.DOLPHIN_HURT;
+    }
+    @Nullable
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.DOLPHIN_DEATH;
+    }
+    @Nullable
+    protected SoundEvent getAmbientSound() {
+        return this.isInWater() ? SoundEvents.DOLPHIN_AMBIENT_WATER : SoundEvents.DOLPHIN_AMBIENT;
+    }
+    protected SoundEvent getSwimSplashSound() {
+        return SoundEvents.DOLPHIN_SPLASH;
+    }
+    protected SoundEvent getSwimSound() {
+        return SoundEvents.DOLPHIN_SWIM;
+    }
+    //--------------------------------------------------------------------------------
+
+    //Blue Whale Dry out
     public void tick() {
         super.tick();
         if (this.isNoAi()) {
@@ -117,7 +146,9 @@ public class BlueWhaleEntity extends WaterAnimal {
 
         }
     }
+    //--------------------------------------------------------------------------------
 
+    //Blue Whale Travel
     public void travel(Vec3 pTravelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), pTravelVector);
@@ -130,33 +161,5 @@ public class BlueWhaleEntity extends WaterAnimal {
             super.travel(pTravelVector);
         }
 
-    }
-
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new BreathAirGoal(this));
-        this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 0.7D, 10));
-        this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.7D));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this ,0.7D));
-    }
-
-    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.DOLPHIN_HURT;
-    }
-    @Nullable
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.DOLPHIN_DEATH;
-    }
-
-    @Nullable
-    protected SoundEvent getAmbientSound() {
-        return this.isInWater() ? SoundEvents.DOLPHIN_AMBIENT_WATER : SoundEvents.DOLPHIN_AMBIENT;
-    }
-
-    protected SoundEvent getSwimSplashSound() {
-        return SoundEvents.DOLPHIN_SPLASH;
-    }
-    protected SoundEvent getSwimSound() {
-        return SoundEvents.DOLPHIN_SWIM;
     }
 }
