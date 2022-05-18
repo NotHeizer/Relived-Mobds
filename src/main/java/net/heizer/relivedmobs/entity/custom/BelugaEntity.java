@@ -22,10 +22,13 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -34,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
+import java.util.List;
 
 
 public class BelugaEntity extends WaterAnimal {
@@ -67,6 +71,7 @@ public class BelugaEntity extends WaterAnimal {
         this.goalSelector.addGoal(1, new RandomSwimmingGoal(this, 1.0D, 10));
         this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new BelugaSwimWithPlayerGoal(this, 4.0D));
+        this.goalSelector.addGoal(2, new BelugaPlayWithItemsGoal());
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.7D));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this ,0.7D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.3D, Ingredient.of(Items.SALMON), false));
@@ -249,6 +254,67 @@ public class BelugaEntity extends WaterAnimal {
                 this.player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 100), this.beluga);
             }
 
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+
+    class BelugaPlayWithItemsGoal extends Goal {
+        private int cooldown;
+
+        public boolean canUse() {
+            if (this.cooldown > BelugaEntity.this.tickCount) {
+                return false;
+            } else {
+                List<ItemEntity> list = BelugaEntity.this.level.getEntitiesOfClass(ItemEntity.class, BelugaEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Dolphin.ALLOWED_ITEMS);
+                return !list.isEmpty() || !BelugaEntity.this.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty();
+            }
+        }
+
+        public void start() {
+            List<ItemEntity> list = BelugaEntity.this.level.getEntitiesOfClass(ItemEntity.class, BelugaEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Dolphin.ALLOWED_ITEMS);
+            if (!list.isEmpty()) {
+                BelugaEntity.this.getNavigation().moveTo(list.get(0), (double)1.2F);
+                BelugaEntity.this.playSound(SoundEvents.DOLPHIN_PLAY, 1.0F, 1.0F);
+            }
+
+            this.cooldown = 0;
+        }
+
+        public void stop() {
+            ItemStack itemstack = BelugaEntity.this.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (!itemstack.isEmpty()) {
+                this.drop(itemstack);
+                BelugaEntity.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                this.cooldown = BelugaEntity.this.tickCount + BelugaEntity.this.random.nextInt(100);
+            }
+
+        }
+
+        public void tick() {
+            List<ItemEntity> list = BelugaEntity.this.level.getEntitiesOfClass(ItemEntity.class, BelugaEntity.this.getBoundingBox().inflate(8.0D, 8.0D, 8.0D), Dolphin.ALLOWED_ITEMS);
+            ItemStack itemstack = BelugaEntity.this.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (!itemstack.isEmpty()) {
+                this.drop(itemstack);
+                BelugaEntity.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            } else if (!list.isEmpty()) {
+                BelugaEntity.this.getNavigation().moveTo(list.get(0), (double)1.2F);
+            }
+
+        }
+
+        private void drop(ItemStack p_28429_) {
+            if (!p_28429_.isEmpty()) {
+                double d0 = BelugaEntity.this.getEyeY() - (double)0.3F;
+                ItemEntity itementity = new ItemEntity(BelugaEntity.this.level, BelugaEntity.this.getX(), d0, BelugaEntity.this.getZ(), p_28429_);
+                itementity.setPickUpDelay(40);
+                itementity.setThrower(BelugaEntity.this.getUUID());
+                float f = 0.3F;
+                float f1 = BelugaEntity.this.random.nextFloat() * ((float)Math.PI * 2F);
+                float f2 = 0.02F * BelugaEntity.this.random.nextFloat();
+                itementity.setDeltaMovement((double)(0.3F * -Mth.sin(BelugaEntity.this.getYRot() * ((float)Math.PI / 180F)) * Mth.cos(BelugaEntity.this.getXRot() * ((float)Math.PI / 180F)) + Mth.cos(f1) * f2), (double)(0.3F * Mth.sin(BelugaEntity.this.getXRot() * ((float)Math.PI / 180F)) * 1.5F), (double)(0.3F * Mth.cos(BelugaEntity.this.getYRot() * ((float)Math.PI / 180F)) * Mth.cos(BelugaEntity.this.getXRot() * ((float)Math.PI / 180F)) + Mth.sin(f1) * f2));
+                BelugaEntity.this.level.addFreshEntity(itementity);
+            }
         }
     }
 }
