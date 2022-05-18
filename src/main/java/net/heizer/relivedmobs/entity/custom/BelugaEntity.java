@@ -52,7 +52,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Beluga Attributes
     public static AttributeSupplier setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 30D)
@@ -62,7 +61,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Beluga Goals
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(0, new TryFindWaterGoal(this));
@@ -81,7 +79,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Breath Underwater|Air Supply|Moistness
     public boolean canBreatheUnderwater() {
         return false;
     }
@@ -101,10 +98,10 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Can be Leashed
     public boolean canBeLeashed(Player pPlayer) {
         return true;
     }
+
     //--------------------------------------------------------------------------------
 
     //Beluga Path Navigation
@@ -114,7 +111,6 @@ public class BelugaEntity extends WaterAnimal {
 
     //--------------------------------------------------------------------------------
 
-    //Beluga Sounds
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return SoundEvents.DOLPHIN_HURT;
     }
@@ -132,9 +128,9 @@ public class BelugaEntity extends WaterAnimal {
     protected SoundEvent getSwimSound() {
         return SoundEvents.DOLPHIN_SWIM;
     }
+
     //--------------------------------------------------------------------------------
 
-    //Register EntityDataAccessor
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(MOISTNESS_LEVEL, 2400);
@@ -155,7 +151,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Beluga Dry out
     public void tick() {
         super.tick();
         if (this.isNoAi()) {
@@ -193,7 +188,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Beluga Travel
     public void travel(Vec3 p_28383_) {
         if (this.isEffectiveAi() && this.isInWater()) {
             this.moveRelative(this.getSpeed(), p_28383_);
@@ -209,7 +203,6 @@ public class BelugaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //BelugaSwimWithPlayer Goal
     static class BelugaSwimWithPlayerGoal extends Goal {
         private final BelugaEntity beluga;
         private final double speedModifier;

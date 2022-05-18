@@ -56,7 +56,6 @@ public class PiranhaEntity extends WaterAnimal {
 
     //--------------------------------------------------------------------------------
 
-    //Piranha Attributes
     public static AttributeSupplier setAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 8D)
@@ -69,7 +68,6 @@ public class PiranhaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Piranha Goals
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(0, new TryFindWaterGoal(this));
@@ -87,7 +85,6 @@ public class PiranhaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Breath Underwater|Air Supply|Moistness
     public boolean canBreatheUnderwater() {
         return false;
     }
@@ -112,13 +109,11 @@ public class PiranhaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Piranha Path Navigation
     protected PathNavigation createNavigation(Level pLevel) {
         return new WaterBoundPathNavigation(this, pLevel);
     }
-    //--------------------------------------------------------------------------------
 
-    //Piranha Sounds
+    //--------------------------------------------------------------------------------
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return SoundEvents.DOLPHIN_HURT;
@@ -144,7 +139,6 @@ public class PiranhaEntity extends WaterAnimal {
 
     //--------------------------------------------------------------------------------
 
-    //Register EntityDataAccessor | Piranha Variants
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_29389_, DifficultyInstance p_29390_, MobSpawnType p_29391_, @Nullable SpawnGroupData p_29392_, @Nullable CompoundTag p_29393_) {
         this.setVariant(this.random.nextInt(2));
@@ -182,7 +176,6 @@ public class PiranhaEntity extends WaterAnimal {
     }
     //--------------------------------------------------------------------------------
 
-    //Piranha Dry out
     public void tick() {
         super.tick();
         if (this.isNoAi()) {
