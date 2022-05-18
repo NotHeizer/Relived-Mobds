@@ -26,12 +26,15 @@ public class RMModEntityGeneration {
             event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BELUGA.get(), 6, 1, 3));
         }
 
-        //Blue Whale spawn
-        if(doesBiomeMatch(event.getName(), Biomes.DEEP_OCEAN)) {
-            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 1, 1, 1));
+        //Piranha spawn
+        if(doesBiomeMatch(event.getName(), Biomes.JUNGLE)) {
+            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.PIRANHA.get(), 1, 1, 1));
         }
-        if(doesBiomeMatch(event.getName(), Biomes.DEEP_LUKEWARM_OCEAN)) {
-            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.BLUE_WHALE.get(), 1, 1, 1));
+        if(doesBiomeMatch(event.getName(), Biomes.BAMBOO_JUNGLE)) {
+            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.PIRANHA.get(), 1, 1, 1));
+        }
+        if(doesBiomeMatch(event.getName(), Biomes.SPARSE_JUNGLE)) {
+            event.getSpawns().getSpawner(MobCategory.WATER_CREATURE).add(new MobSpawnSettings.SpawnerData(RMModEntityTypes.PIRANHA.get(), 1, 1, 1));
         }
     }
 

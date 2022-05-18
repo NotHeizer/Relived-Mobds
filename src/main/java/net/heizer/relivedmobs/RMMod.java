@@ -3,11 +3,11 @@ package net.heizer.relivedmobs;
 import com.mojang.logging.LogUtils;
 import net.heizer.relivedmobs.entity.RMModEntityTypes;
 import net.heizer.relivedmobs.entity.client.model.BelugaModel;
-import net.heizer.relivedmobs.entity.client.model.BlueWhaleModel;
+import net.heizer.relivedmobs.entity.client.model.PiranhaModel;
 import net.heizer.relivedmobs.entity.client.renderer.BelugaRenderer;
-import net.heizer.relivedmobs.entity.client.renderer.BlueWhaleRenderer;
+import net.heizer.relivedmobs.entity.client.renderer.PiranhaRenderer;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
-import net.heizer.relivedmobs.entity.custom.BlueWhaleEntity;
+import net.heizer.relivedmobs.entity.custom.PiranhaEntity;
 import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -46,16 +46,18 @@ public class RMMod {
     private void clientSetup(final FMLClientSetupEvent event) {
 
         EntityRenderers.register(RMModEntityTypes.BELUGA.get(), BelugaRenderer::new);
-        EntityRenderers.register(RMModEntityTypes.BLUE_WHALE.get(), BlueWhaleRenderer::new);
+        EntityRenderers.register(RMModEntityTypes.PIRANHA.get(), PiranhaRenderer::new);
     }
 
     private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+
         event.registerLayerDefinition(BelugaModel.LAYER_LOCATION, BelugaModel::createBodyLayer);
-        event.registerLayerDefinition(BlueWhaleModel.LAYER_LOCATION, BlueWhaleModel::createBodyLayer);
+        event.registerLayerDefinition(PiranhaModel.LAYER_LOCATION, PiranhaModel::createBodyLayer);
     }
 
 
     private void setup(final FMLCommonSetupEvent event) {
+
         event.enqueueWork(() -> {
             SpawnPlacements.register(RMModEntityTypes.BELUGA.get(),
                     SpawnPlacements.Type.IN_WATER,
@@ -63,7 +65,7 @@ public class RMMod {
                     WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         });
         event.enqueueWork(() -> {
-            SpawnPlacements.register(RMModEntityTypes.BLUE_WHALE.get(),
+            SpawnPlacements.register(RMModEntityTypes.PIRANHA.get(),
                     SpawnPlacements.Type.IN_WATER,
                     Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
@@ -71,7 +73,8 @@ public class RMMod {
     }
 
     private void entityAttributeEvent(EntityAttributeCreationEvent event) {
+
         event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
-        event.put(RMModEntityTypes.BLUE_WHALE.get(), BlueWhaleEntity.setAttributes());
+        event.put(RMModEntityTypes.PIRANHA.get(), PiranhaEntity.setAttributes());
     }
 }

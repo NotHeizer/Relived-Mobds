@@ -1,18 +1,19 @@
 package net.heizer.relivedmobs.entity.custom;
 
+import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
@@ -21,10 +22,14 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Pufferfish;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -50,8 +55,8 @@ public class BelugaEntity extends WaterAnimal {
     //Beluga Attributes
     public static AttributeSupplier setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20D)
-                .add(Attributes.MOVEMENT_SPEED, 0.7f)
+                .add(Attributes.MAX_HEALTH, 30D)
+                .add(Attributes.MOVEMENT_SPEED, 1.5f)
                 .add(Attributes.FOLLOW_RANGE, 100D)
                 .build();
     }
@@ -66,9 +71,13 @@ public class BelugaEntity extends WaterAnimal {
         this.goalSelector.addGoal(2, new BelugaSwimWithPlayerGoal(this, 4.0D));
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.7D));
         this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this ,0.7D));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.3D, Ingredient.of(Items.SALMON), false));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.3D, Ingredient.of(Items.COD), false));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 2D, Ingredient.of(Items.PUFFERFISH), true));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new FollowBoatGoal(this));
-        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Guardian.class, 8.0F, 1.0D, 1.0D));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Guardian.class, 8.0F, 1.5D, 2.0D));
+        this.goalSelector.addGoal(5, new AvoidEntityGoal<>(this, Pufferfish.class, 8.0F, 1.5D, 2.0D));
     }
     //--------------------------------------------------------------------------------
 
@@ -123,7 +132,27 @@ public class BelugaEntity extends WaterAnimal {
     protected SoundEvent getSwimSound() {
         return SoundEvents.DOLPHIN_SWIM;
     }
+    //--------------------------------------------------------------------------------
 
+    //Register EntityDataAccessor
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(MOISTNESS_LEVEL, 2400);
+    }
+    public void addAdditionalSaveData(CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("Moistness", this.getMoistnessLevel());
+    }
+    public void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setMoisntessLevel(pCompound.getInt("Moistness"));
+    }
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+        this.setAirSupply(this.getMaxAirSupply());
+        this.setXRot(0.0F);
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+    }
     //--------------------------------------------------------------------------------
 
     //Beluga Dry out

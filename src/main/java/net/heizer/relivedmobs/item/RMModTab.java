@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class RMModTab {
 
-    public static final CreativeModeTab RELIVED_MOBS = new CreativeModeTab("relived_mobs_tab") {
+    public static final CreativeModeTab TAB = new CreativeModeTab("relived_mobs_tab") {
         @Override
         public ItemStack makeIcon() {
             return new  ItemStack(RMModItems.BELUGA_SPAWN_EGG.get());

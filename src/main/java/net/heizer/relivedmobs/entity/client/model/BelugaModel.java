@@ -32,7 +32,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
         //Root
         this.root = root;
         //Beluga
-        this.beluga = root.getChild("Beluga");
+        this.beluga = root.getChild("beluga");
         //Tail
         this.tail = beluga.getChild("tail");
         this.back_fin = tail.getChild("back_fin");
@@ -56,9 +56,9 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
         tail.addOrReplaceChild("back_fin", CubeListBuilder.create().texOffs(38, 40).addBox(-8.5F, -1.5F, -3.0F, 17.0F, 3.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.5F, 15.0F));
 
-        beluga.addOrReplaceChild("fin0", CubeListBuilder.create().texOffs(47, 65).addBox(-1.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(7.9F, 5.0F, -5.5F, 0.0F, 0.0F, 0.5236F));
+        PartDefinition fin0 = beluga.addOrReplaceChild("fin0", CubeListBuilder.create().texOffs(47, 65).addBox(-1.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.9F, 4.0F, -6.5F, 0.1129F, -0.4842F, 0.7118F));
 
-        beluga.addOrReplaceChild("fin1", CubeListBuilder.create().texOffs(54, 56).mirror().addBox(-10.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-7.9F, 5.0F, -5.5F, 0.0F, 0.0F, -0.5236F));
+        PartDefinition fin1 = beluga.addOrReplaceChild("fin1", CubeListBuilder.create().texOffs(54, 56).mirror().addBox(-10.0F, -1.0F, -3.5F, 11.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.9F, 4.0F, -6.5F, 0.1129F, 0.4842F, -0.7118F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
@@ -72,7 +72,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
             this.tail.xRot = -0.1F * Mth.cos(ageInTicks * 0.5F);
             this.back_fin.xRot = -0.3F * Mth.cos(ageInTicks * 0.5F);
         }
-        this.fin0.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
+        this.fin0.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * -0.3 * limbSwingAmount);
         this.fin1.zRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
     }
 
