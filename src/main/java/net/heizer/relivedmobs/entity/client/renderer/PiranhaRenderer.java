@@ -17,7 +17,7 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaModel<Pir
     };
 
     public PiranhaRenderer(EntityRendererProvider.Context context) {
-        super(context, new PiranhaModel<>(context.bakeLayer(PiranhaModel.LAYER_LOCATION)), 1F);
+        super(context, new PiranhaModel<>(context.bakeLayer(PiranhaModel.LAYER_LOCATION)), 0.2F);
     }
 
     @Override

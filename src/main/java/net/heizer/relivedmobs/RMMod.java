@@ -4,10 +4,13 @@ import com.mojang.logging.LogUtils;
 import net.heizer.relivedmobs.entity.RMModEntityTypes;
 import net.heizer.relivedmobs.entity.client.model.BelugaModel;
 import net.heizer.relivedmobs.entity.client.model.PiranhaModel;
+import net.heizer.relivedmobs.entity.client.model.SilversideModel;
 import net.heizer.relivedmobs.entity.client.renderer.BelugaRenderer;
 import net.heizer.relivedmobs.entity.client.renderer.PiranhaRenderer;
+import net.heizer.relivedmobs.entity.client.renderer.SilversideRenderer;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
 import net.heizer.relivedmobs.entity.custom.PiranhaEntity;
+import net.heizer.relivedmobs.entity.custom.SilversideEntity;
 import net.heizer.relivedmobs.item.RMModItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -47,12 +50,14 @@ public class RMMod {
 
         EntityRenderers.register(RMModEntityTypes.BELUGA.get(), BelugaRenderer::new);
         EntityRenderers.register(RMModEntityTypes.PIRANHA.get(), PiranhaRenderer::new);
+        EntityRenderers.register(RMModEntityTypes.SILVERSIDE.get(), SilversideRenderer::new);
     }
 
     private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 
         event.registerLayerDefinition(BelugaModel.LAYER_LOCATION, BelugaModel::createBodyLayer);
         event.registerLayerDefinition(PiranhaModel.LAYER_LOCATION, PiranhaModel::createBodyLayer);
+        event.registerLayerDefinition(SilversideModel.LAYER_LOCATION, SilversideModel::createBodyLayer);
     }
 
 
@@ -66,6 +71,12 @@ public class RMMod {
         });
         event.enqueueWork(() -> {
             SpawnPlacements.register(RMModEntityTypes.PIRANHA.get(),
+                    SpawnPlacements.Type.IN_WATER,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        });
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(RMModEntityTypes.SILVERSIDE.get(),
                     SpawnPlacements.Type.IN_WATER,
                     Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     WaterAnimal::checkSurfaceWaterAnimalSpawnRules);

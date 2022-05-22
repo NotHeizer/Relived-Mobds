@@ -17,7 +17,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RMMod.MOD_ID, "beluga"), "main");
 
-    //Beluga Body
+    //beluga Body
     private final ModelPart beluga;
     private final ModelPart root;
     //Tail
@@ -31,7 +31,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
     public BelugaModel(ModelPart root) {
         //Root
         this.root = root;
-        //Beluga
+        //beluga
         this.beluga = root.getChild("beluga");
         //Tail
         this.tail = beluga.getChild("tail");
@@ -46,7 +46,7 @@ public class BelugaModel<T extends Entity> extends EntityModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition beluga = partdefinition.addOrReplaceChild("Beluga", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 1.0F));
+        PartDefinition beluga = partdefinition.addOrReplaceChild("beluga", CubeListBuilder.create(), PartPose.offset(0.0F, 17.0F, 1.0F));
 
         PartDefinition body = beluga.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-7.5F, -10.0F, -13.0F, 15.0F, 16.0F, 24.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.0F, 1.0F));
 

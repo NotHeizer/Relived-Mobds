@@ -61,11 +61,11 @@ public class PiranhaModel<T extends Entity> extends EntityModel<T> {
         this.piranha.xRot = headPitch * ((float)Math.PI / 180F);
         this.piranha.yRot = headPitch * ((float)Math.PI / 180F);
         if (entity.getDeltaMovement().horizontalDistanceSqr() > 1.0E-7D) {
-            this.piranha.xRot += -0.08F - 0.08F * Mth.cos(ageInTicks * 0.5F);
-            this.fin_back.xRot = -0.1F * Mth.cos(ageInTicks * 0.5F);
+            this.piranha.yRot += -0.08F - 0.08F * Mth.cos(ageInTicks * 0.5F);
+            this.fin_back.yRot = -0.1F * Mth.cos(ageInTicks * 0.5F);
         }
-        this.fin_r.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
-        this.fin_l.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
+        this.fin_r.yRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
+        this.fin_l.yRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.3 * limbSwingAmount);
     }
 
     @Override

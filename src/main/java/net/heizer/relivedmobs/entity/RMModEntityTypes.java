@@ -3,6 +3,7 @@ package net.heizer.relivedmobs.entity;
 import net.heizer.relivedmobs.RMMod;
 import net.heizer.relivedmobs.entity.custom.BelugaEntity;
 import net.heizer.relivedmobs.entity.custom.PiranhaEntity;
+import net.heizer.relivedmobs.entity.custom.SilversideEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,8 +23,13 @@ public class RMModEntityTypes {
 
     public static final RegistryObject<EntityType<PiranhaEntity>> PIRANHA = ENTITY_TYPES.register("piranha",
             () -> EntityType.Builder.of(PiranhaEntity::new, MobCategory.WATER_CREATURE)
-                    .sized(0.2f, 0.2f)
+                    .sized(0.8f, 0.5f)
                     .build(new ResourceLocation(RMMod.MOD_ID, "piranha").toString()));
+
+    public static final RegistryObject<EntityType<SilversideEntity>> SILVERSIDE = ENTITY_TYPES.register("silverside",
+            () -> EntityType.Builder.of(SilversideEntity::new, MobCategory.WATER_CREATURE)
+                    .sized(0.4f, 0.3f)
+                    .build(new ResourceLocation(RMMod.MOD_ID, "silverside").toString()));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

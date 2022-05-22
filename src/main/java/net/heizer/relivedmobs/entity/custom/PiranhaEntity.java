@@ -1,16 +1,14 @@
 package net.heizer.relivedmobs.entity.custom;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -20,27 +18,20 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Squid;
 import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CaveVines;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.EnumSet;
+import java.util.function.Predicate;
 
 public class PiranhaEntity extends WaterAnimal {
     public static final int TOTAL_AIR_SUPPLY = 2500;
@@ -58,10 +49,10 @@ public class PiranhaEntity extends WaterAnimal {
 
     public static AttributeSupplier setAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 8D)
-                .add(Attributes.MOVEMENT_SPEED, 1f)
+                .add(Attributes.MAX_HEALTH, 4D)
+                .add(Attributes.MOVEMENT_SPEED, 1.2F)
                 .add(Attributes.FOLLOW_RANGE, 50D)
-                .add(Attributes.ATTACK_DAMAGE, 2f)
+                .add(Attributes.ATTACK_DAMAGE, 3f)
                 .add(Attributes.ATTACK_SPEED, 1.0f)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5f)
                 .build();
@@ -71,17 +62,13 @@ public class PiranhaEntity extends WaterAnimal {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new BreathAirGoal(this));
         this.goalSelector.addGoal(0, new TryFindWaterGoal(this));
-        this.goalSelector.addGoal(0, new RandomSwimmingGoal(this, 1.0D, 10));
-        this.goalSelector.addGoal(0, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(1, new RandomStrollGoal(this, 0.7D));
-        this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.7D));
-        this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.9D, 32.0F));
-        this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(4, new FollowBoatGoal(this));
-
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Squid.class, true, false));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Squid.class, true, false));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, (double)1.2F, true));
+        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Guardian.class, 8.0F, 1.0D, 1.0D));
     }
     //--------------------------------------------------------------------------------
 
@@ -96,7 +83,7 @@ public class PiranhaEntity extends WaterAnimal {
         return this.entityData.get(MOISTNESS_LEVEL);
     }
 
-    public void setMoisntessLevel(int p_28344_) {
+    public void setMoistnessLevel(int p_28344_) {
         this.entityData.set(MOISTNESS_LEVEL, p_28344_);
     }
 
@@ -116,7 +103,7 @@ public class PiranhaEntity extends WaterAnimal {
     //--------------------------------------------------------------------------------
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.DOLPHIN_HURT;
+        return SoundEvents.SALMON_HURT;
     }
 
     @Nullable
@@ -128,15 +115,6 @@ public class PiranhaEntity extends WaterAnimal {
     protected SoundEvent getAmbientSound() {
         return this.isInWater() ? SoundEvents.SALMON_AMBIENT : SoundEvents.COD_AMBIENT;
     }
-
-    protected SoundEvent getSwimSplashSound() {
-        return SoundEvents.DOLPHIN_SPLASH;
-    }
-
-    protected SoundEvent getSwimSound() {
-        return SoundEvents.DOLPHIN_SWIM;
-    }
-
     //--------------------------------------------------------------------------------
 
     @Nullable
@@ -172,7 +150,22 @@ public class PiranhaEntity extends WaterAnimal {
     public void readAdditionalSaveData(CompoundTag p_29402_) {
         super.readAdditionalSaveData(p_29402_);
         this.setVariant(p_29402_.getInt("Variant"));
-        this.setMoisntessLevel(p_29402_.getInt("Moistness"));
+        this.setMoistnessLevel(p_29402_.getInt("Moistness"));
+    }
+    //--------------------------------------------------------------------------------
+
+    public void travel(Vec3 p_28383_) {
+        if (this.isEffectiveAi() && this.isInWater()) {
+            this.moveRelative(this.getSpeed(), p_28383_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            if (this.getTarget() == null) {
+                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.005D, 0.0D));
+            }
+        } else {
+            super.travel(p_28383_);
+        }
+
     }
     //--------------------------------------------------------------------------------
 
@@ -182,9 +175,9 @@ public class PiranhaEntity extends WaterAnimal {
             this.setAirSupply(this.getMaxAirSupply());
         } else {
             if (this.isInWaterRainOrBubble()) {
-                this.setMoisntessLevel(2400);
+                this.setMoistnessLevel(2400);
             } else {
-                this.setMoisntessLevel(this.getMoistnessLevel() - 1);
+                this.setMoistnessLevel(this.getMoistnessLevel() - 1);
                 if (this.getMoistnessLevel() <= 0) {
                     this.hurt(DamageSource.DRY_OUT, 1.0F);
                 }
@@ -212,4 +205,3 @@ public class PiranhaEntity extends WaterAnimal {
         }
     }
 }
-
