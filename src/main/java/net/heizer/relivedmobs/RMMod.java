@@ -87,5 +87,6 @@ public class RMMod {
 
         event.put(RMModEntityTypes.BELUGA.get(), BelugaEntity.setAttributes());
         event.put(RMModEntityTypes.PIRANHA.get(), PiranhaEntity.setAttributes());
+        event.put(RMModEntityTypes.SILVERSIDE.get(), SilversideEntity.setAttributes());
     }
 }

@@ -6,6 +6,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FollowFlockLeaderGoal;
 import net.minecraft.world.entity.animal.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,10 +23,28 @@ public class SilversideEntity extends AbstractSchoolingFish {
     public SilversideEntity(EntityType<? extends AbstractSchoolingFish> p_27523_, Level p_27524_) {
         super(p_27523_, p_27524_);
     }
+    //--------------------------------------------------------------------------------
+
+    public static AttributeSupplier setAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 1D)
+                .add(Attributes.MOVEMENT_SPEED, 2F)
+                .add(Attributes.FOLLOW_RANGE, 50D)
+                .build();
+    }
+    //--------------------------------------------------------------------------------
+
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(5, new FollowFlockLeaderGoal(this));
+    }
+    //--------------------------------------------------------------------------------
 
     public int getMaxSchoolSize() {
         return 30;
     }
+
+    //--------------------------------------------------------------------------------
 
     @Nonnull
     public ItemStack getBucketItemStack() {
@@ -45,6 +66,8 @@ public class SilversideEntity extends AbstractSchoolingFish {
     protected SoundEvent getFlopSound() {
         return SoundEvents.SALMON_FLOP;
     }
+
+    //--------------------------------------------------------------------------------
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {

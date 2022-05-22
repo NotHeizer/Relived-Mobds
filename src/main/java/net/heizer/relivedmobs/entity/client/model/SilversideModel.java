@@ -16,12 +16,10 @@ public class SilversideModel<T extends Entity> extends EntityModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RMMod.MOD_ID, "silverside"), "main");
 
     private final ModelPart silverside;
-    private final ModelPart body;
     private final ModelPart tail;
 
     public SilversideModel(ModelPart root) {
         this.silverside = root.getChild("silverside");
-        this.body = silverside.getChild("body");
         this.tail = silverside.getChild("tail");
     }
 
@@ -29,9 +27,9 @@ public class SilversideModel<T extends Entity> extends EntityModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition silverside = partdefinition.addOrReplaceChild("silverside", CubeListBuilder.create(), PartPose.offset(0.0F, 19.5F, -0.5F));
+        PartDefinition silverside = partdefinition.addOrReplaceChild("silverside", CubeListBuilder.create(), PartPose.offset(0.0F, 22.5F, -0.5F));
 
-        PartDefinition body = silverside.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -0.75F, -4.5F, 2.0F, 2.0F, 9.0F, new CubeDeformation(0.0F))
+        silverside.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -0.75F, -4.5F, 2.0F, 2.0F, 9.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 4).addBox(0.0F, -1.75F, 0.5F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 3).addBox(0.0F, 1.25F, -0.5F, 0.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.25F, -1.0F));
 
@@ -46,10 +44,10 @@ public class SilversideModel<T extends Entity> extends EntityModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.silverside.xRot = Mth.cos( (limbSwing * 1)) * 2 * limbSwingAmount;
-        this.silverside.yRot = Mth.cos((float) (limbSwing * 0.5)) * 2 * limbSwingAmount;
-        this.silverside.y = (float) (Mth.cos( (limbSwing * 1)) * 0.8 * limbSwingAmount);
-        this.tail.yRot = (Mth.cos( (limbSwing * 1)) * 5 * limbSwingAmount);
+        this.silverside.xRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.8 * limbSwingAmount);
+        this.silverside.yRot = (float) (Mth.cos((float) (limbSwing * 0.25)) * 0.8 * limbSwingAmount);
+        this.silverside.y = (float) (Mth.cos((float) (limbSwing * 0.2)) * 0.8 * limbSwingAmount);
+        this.tail.yRot = (float) (Mth.cos((float) (limbSwing * 0.5)) * 0.8 * limbSwingAmount);
     }
 
     @Override
